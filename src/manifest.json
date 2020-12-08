@@ -1,0 +1,43 @@
+{
+  "name": "yuque-helper",
+  "description": "一个语雀辅助小工具",
+  "version": null,
+  "manifest_version": 2,
+  "icons": {
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
+  },
+  "browser_action": {
+    "default_title": "yuque-helper",
+    "default_popup": "popup/popup.html"
+  },
+  "permissions": [
+    "<all_urls>",
+    "*://*/*",
+    "storage",
+    "declarativeContent",
+    "contextMenus",
+    "tabs",
+    "notifications"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content_scripts/test.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}
