@@ -64,6 +64,22 @@ const config = {
   useSimpleQuotation: false
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.location.href.includes('yuque')) {
+    chrome.storage.local.get('yuqueOption', (res) => {
+      let option = res.yuqueOption;
+      if (option.fonts) {
+        // 当前页面设置字体
+        $("*").css("font-family", option.fonts);
+        // todo: 文章内容是异步加载的，延迟 500 毫秒再设置一次，但是网速过慢还是有问题，待优化
+        setTimeout(() => {
+          $("*").css("font-family", option.fonts);
+        }, 500);
+      }
+    })
+  }
+});
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.cmd);
   switch (request.cmd) {
