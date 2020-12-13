@@ -9,7 +9,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item size="large">
-            <el-button type="primary" @click="submitForm">提交</el-button>
+            <el-button type="primary" @click="submitForm">保存</el-button>
             <el-button @click="resetForm">重置</el-button>
           </el-form-item>
         </el-col>
@@ -31,8 +31,6 @@ export default {
       },
     };
   },
-  computed: {},
-  watch: {},
   created() {
     chrome.storage.local.get('yuqueOption', (res) => {
       let optionByStorage = res.yuqueOption;
@@ -46,20 +44,24 @@ export default {
       }
     });
   },
-  mounted() {},
   methods: {
     submitForm() {
       this.$refs['elForm'].validate((valid) => {
         if (!valid) return;
-        // 持久化
-        chrome.storage.local.get('yuqueOption', (res) => {
-          res.yuqueOption = this.yuqueOption;
-          chrome.storage.local.set(res);
-        });
+        this.saveOption();
       });
     },
     resetForm() {
       this.$refs['elForm'].resetFields();
+      this.saveOption();
+    },
+    // 保存配置
+    saveOption() {
+      // 持久化
+      chrome.storage.local.get('yuqueOption', (res) => {
+        res.yuqueOption = this.yuqueOption;
+        chrome.storage.local.set(res);
+      });
     },
   },
 };
