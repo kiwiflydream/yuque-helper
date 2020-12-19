@@ -71,10 +71,18 @@ document.addEventListener('DOMContentLoaded', function () {
       if (option.fonts) {
         // 当前页面设置字体
         $("*").css("font-family", option.fonts);
-        // todo: 文章内容是异步加载的，延迟 500 毫秒再设置一次，但是网速过慢还是有问题，待优化
+        // 文章内容是异步加载的，延迟再设置一次，但是网速过慢还是有问题，待优化
         setTimeout(() => {
           $("*").css("font-family", option.fonts);
         }, 500);
+
+        setTimeout(() => {
+          $("*").css("font-family", option.fonts);
+        }, 1000);
+
+        setTimeout(() => {
+          $("*").css("font-family", option.fonts);
+        }, 3000);
       }
     })
   }
@@ -137,7 +145,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let aTag = $(this);
         let href = aTag.attr('href');
         let title = aTag.attr('title');
-        urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+        if (title) {
+          urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+        }
       });
       sendResponse(urls)
       break;
