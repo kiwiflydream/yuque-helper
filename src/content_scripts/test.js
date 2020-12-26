@@ -35,7 +35,7 @@ const config = {
         before: 这里是一段中文，带着中文符号。这里是一段ChineseText！带着Chinese Punctuations？
         after: 这里是一段中文, 带着中文符号. 这里是一段 ChineseText! 带着 Chinese Punctuations?
     */
-    fullWidthCharsAndFollowingSpaces: true,
+    fullWidthCharsAndFollowingSpaces: false,
 
     /* 
       决定是否格式化半角符号/数字/英文字符
@@ -116,6 +116,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // 添加图片
     case 'append_img':
       $(".lake-content-editor-core").append(`<img src="${request.value}">`);
+      break;
+    case 'append_color_block':
+      $(".lake-content-editor-core").append(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
+      break;
+    case 'append_color_header':
+      $(".lake-content-editor-core").append(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;
     case 'prepend_img':
       $(".lake-content-editor-core").prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);

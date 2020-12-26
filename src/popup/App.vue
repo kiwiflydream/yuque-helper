@@ -9,63 +9,39 @@
       v-for="item in popupItems"
       :key="item.handlerType"
     ></popup-item>
-    <popover-popup-item @append_img="appendImg"></popover-popup-item>
+    <block-popover-popup-item @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
+    <block-popover-popup-item
+      @handler="appendColorBlock"
+      :items="colorBlockItems"
+      title="插入提示框"
+      icon="el-icon-grape"
+      itemWidth="80"
+      itemHeight="45"
+    ></block-popover-popup-item>
+    <block-popover-popup-item
+      @handler="appendColorHeader"
+      :items="colorHeaderItems"
+      title="插入彩色标题头"
+      icon="el-icon-grape"
+      itemWidth="80"
+      itemHeight="45"
+    ></block-popover-popup-item>
   </div>
 </template>
 
 <script>
-import PopoverPopupItem from '../componts/PopoverPopupItem.vue';
+import BlockPopoverPopupItem from '../componts/BlockPopoverPopupItem.vue';
 import PopupItem from '../componts/PopupItem.vue';
+import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../config/config.js';
 
 export default {
-  components: { PopupItem, PopoverPopupItem },
+  components: { PopupItem, BlockPopoverPopupItem },
   data() {
     return {
-      popupItems: [
-        {
-          title: 'Markdown 视图',
-          handlerType: 'markdown',
-          isShow: true,
-          icon: 'el-icon-sugar',
-        },
-        {
-          title: 'Html 视图',
-          handlerType: 'html',
-          isShow: true,
-          icon: 'el-icon-dessert',
-        },
-        {
-          title: '复制 Url',
-          handlerType: 'copyUrl',
-          isShow: true,
-          icon: 'el-icon-food',
-        },
-        {
-          title: '生成 TOC',
-          handlerType: 'toc',
-          icon: 'el-icon-cherry',
-        },
-        {
-          title: '插入 Bing 图片',
-          handlerType: 'prepend_img',
-          icon: 'el-icon-apple',
-        },
-        {
-          title: '首行缩进',
-          handlerType: 'prepend_blank',
-          icon: 'el-icon-pear',
-        },
-        {
-          title: '文本格式化',
-          handlerType: 'format_content',
-          icon: 'el-icon-watermelon',
-        },
-        {
-          title: '获得目录列表',
-          handlerType: 'get_books',
-          icon: 'el-icon-orange',
-        },
-      ],
+      popupItems: popupItems,
+      imgItems: mood,
+      colorBlockItems: colorBlockItems,
+      colorHeaderItems: colorHeaderItems,
     };
   },
   methods: {
@@ -118,6 +94,17 @@ export default {
         console.log('来自content的回复：' + response);
       });
     },
+    // 添加提示框
+    appendColorBlock(imgUrl) {
+      this.sendMessageToContentScript({ cmd: 'append_color_block', value: imgUrl }, function (response) {
+        console.log('来自content的回复：' + response);
+      });
+    },
+    appendColorHeader(imgUrl) {
+      this.sendMessageToContentScript({ cmd: 'append_color_header', value: imgUrl }, function (response) {
+        console.log('来自content的回复：' + response);
+      });
+    },
     isArticleUrl() {
       this.getCurrentTab((tab) => {
         currentTabIsArticleUrl = /https:\/\/.*\.yuque\.com\/.+\/.+\/.+/.test(tab.url);
@@ -140,9 +127,9 @@ export default {
     getBooks() {
       this.sendMessageToContentScript({ cmd: 'get_books', value: '' }, (response) => {
         this.copy(response);
-        if (response){
+        if (response) {
           this.notify('复制成功', '图书目录');
-        }else{
+        } else {
           this.notify('复制失败', '请在目录面使用此功能');
         }
       });
