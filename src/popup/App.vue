@@ -9,20 +9,23 @@
       v-for="item in popupItems"
       :key="item.handlerType"
     ></popup-item>
+
     <block-popover-popup-item @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
+
     <block-popover-popup-item
       @handler="appendColorBlock"
       :items="colorBlockItems"
       title="插入提示框"
-      icon="el-icon-grape"
+      icon="el-icon-potato-strips"
       itemWidth="80"
       itemHeight="45"
     ></block-popover-popup-item>
+
     <block-popover-popup-item
       @handler="appendColorHeader"
       :items="colorHeaderItems"
       title="插入彩色标题头"
-      icon="el-icon-grape"
+      icon="el-icon-ice-cream-round"
       itemWidth="80"
       itemHeight="45"
     ></block-popover-popup-item>
@@ -32,7 +35,7 @@
 <script>
 import BlockPopoverPopupItem from '../componts/BlockPopoverPopupItem.vue';
 import PopupItem from '../componts/PopupItem.vue';
-import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../config/config.js';
+import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../common/config.js';
 
 export default {
   components: { PopupItem, BlockPopoverPopupItem },

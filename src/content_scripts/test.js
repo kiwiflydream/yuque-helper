@@ -3,6 +3,8 @@ const {
   bishengFormat
 } = require("bisheng-formatter-core");
 
+const { removeAllBlank } = require("../common/utils.js")
+
 
 const config = {
   mainFeature: {
@@ -65,7 +67,9 @@ const config = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.location.href.includes('yuque')) {
+  let currentTabUrl = window.location.href;
+  if (currentTabUrl.includes('yuque')) {
+    // 字体替换
     chrome.storage.local.get('yuqueOption', (res) => {
       let option = res.yuqueOption;
       if (option.fonts) {
@@ -85,8 +89,69 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
       }
     })
+
+    // 统计编辑面文字数
+    if (currentTabUrl.endsWith('edit')) {
+      setInterval(() => {
+        let spanCount = $(".lark-editor-save-tip").children('span').length;
+        let totlaCount = removeAllBlank($(".lake-content-editor-core").text()).length;
+        let totalWordCount = getWordCount(totlaCount, '.lake-content-editor-core');
+        if (spanCount <= 1) {
+          $(".lark-editor-save-tip").append(`<span>&nbsp;(已经写了${totalWordCount}个字)</span>`)
+        } else {
+          $(".lark-editor-save-tip").children('span').last().text(` (已经写了${totalWordCount}个字)`);
+        }
+      }, 500);
+    } else {
+      // 统计阅读时间
+      // 这里不能使用，setTimeout，因为通过目录点击，不会重新加载页面
+      setInterval(() => {
+        let spanCount = $("#header > div > div.header-crumb > span").children('span').length;
+        let wordCount = getWordCount(removeAllBlank($("#content").text()).length, '#content');
+        if (spanCount <= 1) {
+          $("#header > div > div.header-crumb > span").last().append(`<span>&nbsp;(需阅读 ${Math.ceil(wordCount / 300)} 分钟)</span>`)
+        } else {
+          $("#header > div > div.header-crumb > span").children('span').last().text(` (需阅读 ${Math.ceil(wordCount / 300)} 分钟)`);
+        }
+      }, 1000);
+    }
   }
 });
+
+/**
+ * 获得单词总数
+ */
+function getWordCount(totalWordCount, rootSel) {
+  let root = $(`${rootSel}`);
+  // 图片描述
+  let imageMaskWord = removeAllBlank(root.find('.lake-image-mask').text()).length;
+  // 文档描述
+  let docCardWord = removeAllBlank(root.find('.lake-doc-card-view').text()).length;
+  // 按钮描述
+  let dropdownWord = removeAllBlank(root.find('.dropdown-container').text()).length;
+  // 行内卡片
+  let cardInlineWord = removeAllBlank(root.find('.le-card-yuque-inline').text()).length;
+  // 卡片选择
+  let cardselectWord = removeAllBlank(root.find('.lake-cardselect-list').text()).length;
+  // 数学公式
+  let mathWord = removeAllBlank(root.find('.lake-math-container').text()).length;
+  let mathToolWord = removeAllBlank(root.find('.lake-math-editor-toolbar').text()).length;
+  // 所有卡片
+  let cardWord = removeAllBlank(root.find('div[data-card-element="center"]').text()).length;
+
+  // 无效字符
+  let invalidWordCount = Math.max(imageMaskWord, 0)
+    + Math.max(docCardWord, 0)
+    + Math.max(dropdownWord, 0)
+    + Math.max(cardselectWord, 0)
+    + Math.max(mathWord, 0)
+    + Math.max(mathToolWord, 0)
+    + Math.max(cardWord, 0)
+    + Math.max(cardInlineWord, 0);
+
+  const totalCount = totalWordCount - invalidWordCount;
+  return totalCount < 0 ? 0 : totalCount;
+}
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.cmd);
