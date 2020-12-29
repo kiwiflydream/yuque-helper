@@ -75,6 +75,12 @@ export default {
         case 'get_books':
           this.getBooks();
           break;
+        case 'markmap':
+          this.openMarkmap();
+          break;
+        case 'setting':
+          this.openSetting();
+          break;
         default:
           break;
       }
@@ -96,6 +102,19 @@ export default {
       this.sendMessageToContentScript({ cmd: 'append_img', value: imgUrl }, function (response) {
         console.log('来自content的回复：' + response);
       });
+    },
+    // 打开 markmap 目录
+    openMarkmap() {
+      this.sendMessageToContentScript({ cmd: 'get_markmap' }, function (response) {
+        console.log(response);
+        chrome.storage.local.set({ temp: response }, () => {
+          window.open('/markmap/markmap.html', '_blank');
+        });
+      });
+    },
+    // 打开设置
+    openSetting() {
+      window.open('/options/options.html', '_blank');
     },
     // 添加提示框
     appendColorBlock(imgUrl) {

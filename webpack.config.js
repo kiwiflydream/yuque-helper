@@ -13,7 +13,8 @@ const config = {
     'background': './background.js',
     'popup/popup': './popup/popup.js',
     'options/options': './options/options.js',
-    'content_scripts/test': './content_scripts/test.js'
+    'content_scripts/test': './content_scripts/test.js',
+    'markmap/markmap': './markmap/markmap.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -79,6 +80,13 @@ const config = {
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       { from: 'options/options.html', to: 'options/options.html', transform: transformHtml },
+      { from: 'markmap/markmap.html', to: 'markmap/markmap.html', transform: transformHtml },
+      { from: 'markmap/d3@6.3.0.js', to: 'markmap/d3@6.3.0.js', transform: transformHtml },
+      { from: 'markmap/markmap-lib@0.11.1.js', to: 'markmap/markmap-lib@0.11.1.js', transform: transformHtml },
+      { from: 'markmap/markmap-view@0.2.1.js', to: 'markmap/markmap-view@0.2.1.js', transform: transformHtml },
+      { from: 'markmap/markmap-autoloader.js', to: 'markmap/markmap-autoloader.js', transform: transformHtml },
+      { from: 'markmap/prism-core.min.js', to: 'markmap/prism-core.min.js', transform: transformHtml },
+      { from: 'markmap/prism-autoloader.min.js', to: 'markmap/prism-autoloader.min.js', transform: transformHtml },
       {
         from: 'manifest.json',
         to: 'manifest.json',

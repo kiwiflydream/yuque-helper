@@ -4,6 +4,7 @@ const {
 } = require("bisheng-formatter-core");
 
 const { removeAllBlank } = require("../common/utils.js")
+import { defaultYuqeuOption } from '../common/config.js';
 
 
 const config = {
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentTabUrl = window.location.href;
   if (currentTabUrl.includes('yuque')) {
     // 字体替换
-    chrome.storage.local.get('yuqueOption', (res) => {
+    chrome.storage.sync.get({yuqueOption: defaultYuqeuOption}, (res) => {
       let option = res.yuqueOption;
       if (option.fonts) {
         // 当前页面设置字体
@@ -90,31 +91,38 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     })
 
+    chrome.storage.sync.get({yuqueOption: defaultYuqeuOption}, (res) => {
+      let option = res.yuqueOption;
     // 统计编辑面文字数
     if (currentTabUrl.endsWith('edit')) {
+
       setInterval(() => {
         let spanCount = $(".lark-editor-save-tip").children('span').length;
         let totlaCount = removeAllBlank($(".lake-content-editor-core").text()).length;
         let totalWordCount = getWordCount(totlaCount, '.lake-content-editor-core');
         if (spanCount <= 1) {
-          $(".lark-editor-save-tip").append(`<span>&nbsp;(已经写了${totalWordCount}个字)</span>`)
+          $(".lark-editor-save-tip").append(`<span>&nbsp;(${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})</span>`)
         } else {
-          $(".lark-editor-save-tip").children('span').last().text(` (已经写了${totalWordCount}个字)`);
+          $(".lark-editor-save-tip").children('span').last().text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
         }
       }, 500);
+
     } else {
+
       // 统计阅读时间
       // 这里不能使用，setTimeout，因为通过目录点击，不会重新加载页面
       setInterval(() => {
         let spanCount = $("#header > div > div.header-crumb > span").children('span').length;
         let wordCount = getWordCount(removeAllBlank($("#content").text()).length, '#content');
         if (spanCount <= 1) {
-          $("#header > div > div.header-crumb > span").last().append(`<span>&nbsp;(需阅读 ${Math.ceil(wordCount / 300)} 分钟)</span>`)
+          $("#header > div > div.header-crumb > span").last().append(`<span>&nbsp;(需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)</span>`)
         } else {
-          $("#header > div > div.header-crumb > span").children('span').last().text(` (需阅读 ${Math.ceil(wordCount / 300)} 分钟)`);
+          $("#header > div > div.header-crumb > span").children('span').last().text(` (需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)`);
         }
       }, 1000);
+
     }
+  });
   }
 });
 
@@ -157,16 +165,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.cmd);
   switch (request.cmd) {
     case 'toc':
-      let headMk = '';
-      // $(".yuque-doc-content :header").each(function () {
-      //     let tagName = $(this)[0].tagName;
-      //     let title = $(this).text();
-      //     let id = $(this).attr('id');
-      //     let head = ' '.repeat(tagName[1]) + '-';
-      //     if (!/^\s*$/.test(title)) {
-      //         headMk += `${head} (${title})[${id}]` + '<br/>';
-      //     }
-      // });        
+      let headMk = '';       
       $(".lake-content-editor-core :header").each(function () {
         let tagName = $(this)[0].tagName;
         let title = $(this).text();
@@ -221,6 +220,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
       });
       sendResponse(urls)
+      break;
+    // 获得 markmap 文本  
+    case 'get_markmap':
+      let markdownText = $('pre').text();
+      sendResponse(markdownText);
       break;
     default:
       break;

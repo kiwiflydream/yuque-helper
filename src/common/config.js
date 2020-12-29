@@ -140,12 +140,34 @@ let popupItems = [
     title: '获得目录列表',
     handlerType: 'get_books',
     icon: 'el-icon-orange',
+  },  
+  {
+    title: '转成思维导图',
+    handlerType: 'markmap',
+    icon: 'el-icon-milk-tea',
+  },
+  {
+    title: '配置',
+    handlerType: 'setting',
+    icon: 'el-icon-setting',
   },
 ]
+
+/**
+ * 默认配置
+ */
+let defaultYuqeuOption = {
+  fonts: '',
+  countPrefix: '已经写了',
+  countSuffix: '个字',
+  readWordCount: 300,
+  countCoefficient: 1,
+}
 
 export {
   mood,
   colorBlockItems,
   colorHeaderItems,
-  popupItems
+  popupItems,
+  defaultYuqeuOption
 }
