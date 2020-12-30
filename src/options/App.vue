@@ -28,18 +28,18 @@
 
         <el-row type="flex" justify="center">
           <el-col :span="9">
-            <el-form-item label="阅读速度" prop="readWordCount">
-              <el-input v-model="yuqueOption.readWordCount" placeholder="默认为每分钟 300">
-                <template slot="append">/ 分钟</template>
-              </el-input>
+            <el-form-item label="字数统计系数" prop="countCoefficient">
+              <el-input v-model="yuqueOption.countCoefficient" placeholder="默认为 1"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row type="flex" justify="center">
           <el-col :span="9">
-            <el-form-item label="字数统计系数" prop="countCoefficient">
-              <el-input v-model="yuqueOption.countCoefficient" placeholder="默认为 1"></el-input>
+            <el-form-item label="阅读速度" prop="readWordCount">
+              <el-input v-model="yuqueOption.readWordCount" placeholder="默认为每分钟 300">
+                <template slot="append">/ 分钟</template>
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>

@@ -1,7 +1,7 @@
 {
   "name": "yuque-helper",
   "description": "一个语雀辅助小工具",
-  "version": null,
+  "version": "1.1.0",
   "manifest_version": 2,
   "icons": {
     "48": "icons/icon_48.png",
@@ -17,6 +17,7 @@
     "storage",
     "notifications"
   ],
+  "homepage_url": "https://blog.coder4j.cn",
   "background": {
     "scripts": [
       "background.js"

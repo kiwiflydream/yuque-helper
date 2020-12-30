@@ -105,11 +105,18 @@ export default {
     },
     // 打开 markmap 目录
     openMarkmap() {
-      this.sendMessageToContentScript({ cmd: 'get_markmap' }, function (response) {
-        console.log(response);
-        chrome.storage.local.set({ temp: response }, () => {
-          window.open('/markmap/markmap.html', '_blank');
-        });
+      this.getCurrentTab((tab) => {
+        if (!tab.url.includes('markdown')) {
+          // 通知
+          this.notify('生成失败', '请在 markdown 视图下打开');
+        } else {
+          this.sendMessageToContentScript({ cmd: 'get_markmap' }, function (response) {
+            console.log(response);
+            chrome.storage.local.set({ temp: response }, () => {
+              window.open('/markmap/markmap.html', '_blank');
+            });
+          });
+        }
       });
     },
     // 打开设置
