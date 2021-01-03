@@ -217,6 +217,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let title = aTag.attr('title');
         if (title) {
           urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+        }else{
+          title = aTag.text();
+          if (title){
+            urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+          }
         }
       });
       sendResponse(urls)
