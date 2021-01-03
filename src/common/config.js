@@ -162,6 +162,9 @@ let defaultYuqeuOption = {
   countSuffix: '个字',
   readWordCount: 300,
   countCoefficient: 1,
+  wordCount: true,
+  readEvaluate: true,
+  test: '123'
 }
 
 export {
