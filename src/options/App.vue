@@ -46,12 +46,12 @@
 
         <el-row type="flex" justify="center">
           <el-col :span="3">
-            <el-form-item label="阅读评估">
+            <el-form-item label="阅读评估" prop="readEvaluate">
               <el-switch v-model="yuqueOption.readEvaluate" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
           <el-col :span="3">
-            <el-form-item label="字数统计">
+            <el-form-item label="字数统计" prop="wordCount">
               <el-switch v-model="yuqueOption.wordCount" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
@@ -118,6 +118,11 @@ export default {
     // 保存配置
     saveOption() {
       chrome.storage.sync.set({ yuqueOption: this.yuqueOption }, () => {});
+      this.$notify({
+        title: '成功',
+        message: '配置变更成功',
+        type: 'success',
+      });
     },
   },
 };

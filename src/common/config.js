@@ -163,8 +163,7 @@ let defaultYuqeuOption = {
   readWordCount: 300,
   countCoefficient: 1,
   wordCount: true,
-  readEvaluate: true,
-  test: '123'
+  readEvaluate: true
 }
 
 export {
