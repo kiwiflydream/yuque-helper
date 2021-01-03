@@ -165,7 +165,6 @@ function getWordCount(totalWordCount, rootSel) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request.cmd);
   switch (request.cmd) {
     case 'toc':
       let headMk = '';
@@ -233,6 +232,28 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case 'get_markmap':
       let markdownText = $('pre').text();
       sendResponse(markdownText);
+      break;
+    case 'generator_header':
+      let headerArr = new Array(0, 0, 0, 0, 0, 0);
+      $(".lake-content-editor-core :header").each(function () {
+        let tagName = $(this)[0].tagName;
+        let tagNumber = tagName[1];
+        let title = $(this).text();
+        if (title) {
+          let titleArr = title.split(' ');
+          if (titleArr.length == 2) {
+            title = titleArr[1];
+          }
+        }
+
+        let curIndex = tagNumber - 1;
+        headerArr[curIndex] = headerArr[curIndex] + 1;
+        for (let index = tagNumber; index < headerArr.length; index++) {
+          headerArr[index] = 0;
+        }
+        let header = headerArr.join('.').split('.0').join('').split('0.').join('') + ' ';
+        $(this).text(header + title);
+      });
       break;
     default:
       break;

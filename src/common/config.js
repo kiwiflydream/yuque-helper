@@ -147,6 +147,11 @@ let popupItems = [
     icon: 'el-icon-milk-tea',
   },
   {
+    title: '生成编号',
+    handlerType: 'generator_header',
+    icon: 'el-icon-chicken',
+  },
+  {
     title: '配置',
     handlerType: 'setting',
     icon: 'el-icon-setting',

@@ -81,6 +81,9 @@ export default {
         case 'setting':
           this.openSetting();
           break;
+        case 'generator_header':
+          this.sendSimpleMessageToContentScript({ cmd: 'generator_header', value: '' });
+          break;
         default:
           break;
       }
