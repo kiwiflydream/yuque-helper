@@ -91,14 +91,22 @@ export default {
     // 以 markdown 打开
     openMarkdown() {
       this.getCurrentTab((tab) => {
-        window.open(tab.url + '/markdown?plain=true&linebreak=false&anchor=false', '_blank');
+        window.open(this.urlFormat(tab.url) + '/markdown?plain=true&linebreak=false&anchor=false', '_blank');
       });
     },
     // 以 html 打开
     openHtml() {
       this.getCurrentTab((tab) => {
-        window.open(tab.url + '/html', '_blank');
+        window.open(this.urlFormat(tab.url) + '/html', '_blank');
       });
+    },
+    // 格式化 url，如果是语雀的链接就去除 /edit
+    urlFormat(url) {
+      if (url.includes('yuque')) {
+        return url.replace('/edit', '');
+      } else {
+        return url;
+      }
     },
     // 添加表情
     appendImg(imgUrl) {
@@ -168,7 +176,7 @@ export default {
     },
     copyUrl() {
       this.getCurrentTab((tab) => {
-        let urlByMarkdown = '[' + tab.title + '](' + tab.url + ')';
+        let urlByMarkdown = '[' + tab.title + '](' + this.urlFormat(tab.url) + ')';
         this.copy(urlByMarkdown);
         // 通知
         this.notify('复制成功', '复制内容： ' + urlByMarkdown);
