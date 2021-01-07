@@ -3,7 +3,7 @@ const {
   bishengFormat
 } = require("bisheng-formatter-core");
 
-const { removeAllBlank, getSaleConfig } = require("../common/utils.js")
+const { removeAllBlank, getSaleConfig, insertContent } = require("../common/utils.js")
 import { defaultYuqeuOption } from '../common/config.js';
 
 
@@ -184,10 +184,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       $(".lake-content-editor-core").append(`<img src="${request.value}">`);
       break;
     case 'append_color_block':
-      $(".lake-content-editor-core").append(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
+      insertContent(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`)
       break;
     case 'append_color_header':
-      $(".lake-content-editor-core").append(`<p><span style="background-color: ${request.value};"> </span> </p>`);
+      insertContent(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;
     case 'prepend_img':
       $(".lake-content-editor-core").prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
