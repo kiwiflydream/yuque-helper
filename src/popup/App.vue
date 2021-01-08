@@ -84,19 +84,22 @@ export default {
         case 'generator_header':
           this.sendSimpleMessageToContentScript({ cmd: 'generator_header', value: '' });
           break;
+        case 'clipper':
+          this.sendSimpleMessageToContentScript({ cmd: 'clipper', value: '' });
+          break;
         default:
           break;
       }
     },
     // 以 markdown 打开
     openMarkdown() {
-      this.getCurrentTab((tab) => {
+      this.getCurrentTab(tab => {
         window.open(this.urlFormat(tab.url) + '/markdown?plain=true&linebreak=false&anchor=false', '_blank');
       });
     },
     // 以 html 打开
     openHtml() {
-      this.getCurrentTab((tab) => {
+      this.getCurrentTab(tab => {
         window.open(this.urlFormat(tab.url) + '/html', '_blank');
       });
     },
@@ -110,18 +113,18 @@ export default {
     },
     // 添加表情
     appendImg(imgUrl) {
-      this.sendMessageToContentScript({ cmd: 'append_img', value: imgUrl }, function (response) {
+      this.sendMessageToContentScript({ cmd: 'append_img', value: imgUrl }, function(response) {
         console.log('来自content的回复：' + response);
       });
     },
     // 打开 markmap 目录
     openMarkmap() {
-      this.getCurrentTab((tab) => {
+      this.getCurrentTab(tab => {
         if (!tab.url.includes('markdown')) {
           // 通知
           this.notify('生成失败', '请在 markdown 视图下打开');
         } else {
-          this.sendMessageToContentScript({ cmd: 'get_markmap' }, function (response) {
+          this.sendMessageToContentScript({ cmd: 'get_markmap' }, function(response) {
             console.log(response);
             chrome.storage.local.set({ temp: response }, () => {
               window.open('/markmap/markmap.html', '_blank');
@@ -136,17 +139,17 @@ export default {
     },
     // 添加提示框
     appendColorBlock(imgUrl) {
-      this.sendMessageToContentScript({ cmd: 'append_color_block', value: imgUrl }, function (response) {
+      this.sendMessageToContentScript({ cmd: 'append_color_block', value: imgUrl }, function(response) {
         console.log('来自content的回复：' + response);
       });
     },
     appendColorHeader(imgUrl) {
-      this.sendMessageToContentScript({ cmd: 'append_color_header', value: imgUrl }, function (response) {
+      this.sendMessageToContentScript({ cmd: 'append_color_header', value: imgUrl }, function(response) {
         console.log('来自content的回复：' + response);
       });
     },
     isArticleUrl() {
-      this.getCurrentTab((tab) => {
+      this.getCurrentTab(tab => {
         currentTabIsArticleUrl = /https:\/\/.*\.yuque\.com\/.+\/.+\/.+/.test(tab.url);
       });
     },
@@ -165,7 +168,7 @@ export default {
     },
     // 获得书籍目标
     getBooks() {
-      this.sendMessageToContentScript({ cmd: 'get_books', value: '' }, (response) => {
+      this.sendMessageToContentScript({ cmd: 'get_books', value: '' }, response => {
         this.copy(response);
         if (response) {
           this.notify('复制成功', '图书目录');
@@ -175,7 +178,7 @@ export default {
       });
     },
     copyUrl() {
-      this.getCurrentTab((tab) => {
+      this.getCurrentTab(tab => {
         let urlByMarkdown = '[' + tab.title + '](' + this.urlFormat(tab.url) + ')';
         this.copy(urlByMarkdown);
         // 通知
@@ -188,7 +191,7 @@ export default {
           active: true,
           currentWindow: true,
         },
-        function (tabs) {
+        function(tabs) {
           if (callback) callback(tabs.length ? tabs[0] : null);
         }
       );
@@ -204,12 +207,12 @@ export default {
     },
     // 发送简单消息给 content script
     sendSimpleMessageToContentScript(request) {
-      this.sendMessageToContentScript(request, function (response) {});
+      this.sendMessageToContentScript(request, function(response) {});
     },
     // 发送消息给 content script
     sendMessageToContentScript(message, callback) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, message, function(response) {
           if (callback) callback(response);
         });
       });
