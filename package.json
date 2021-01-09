@@ -29,7 +29,9 @@
     "element-ui": "^2.14.1",
     "jquery": "^3.5.1",
     "turndown": "^7.0.0",
+    "turndown-plugin-gfm": "^1.0.2",
     "vue": "^2.6.10",
+    "vue-meditor": "^2.1.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },

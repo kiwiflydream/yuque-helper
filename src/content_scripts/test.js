@@ -5,6 +5,7 @@ const { removeAllBlank, getSaleConfig, insertContent } = require('../common/util
 import { defaultYuqeuOption } from '../common/config.js';
 var { Readability } = require('@mozilla/readability');
 var TurndownService = require('turndown').default;
+var turndownPluginGfm = require('turndown-plugin-gfm');
 
 const config = {
   mainFeature: {
@@ -243,20 +244,36 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     case 'clipper':
       // 正文提取
       var documentClone = document.cloneNode(true);
+
+      // 排除
+      // 不知道原理，直接 remove 无效，好像只支持通过 getElementById 才能删除
+      let array = documentClone.getElementsByClassName('lake-image-mask-point');
+      for (let index = 0; index < array.length; index++) {
+        array[index].innerText = '';
+      }
       var article = new Readability(documentClone).parse();
 
       // html -> markdown
-      var turndownService = new TurndownService();
+      var turndownService = new TurndownService({ codeBlockStyle: 'fenced', preformattedCode: true });
       turndownService.addRule('code', {
         filter: ['code'],
         replacement: function(content) {
           return '```' + content + '```';
         },
       });
+      var gfm = turndownPluginGfm.gfm;
+      var tables = turndownPluginGfm.tables;
+      turndownService.use(gfm);
+      turndownService.use(tables);
 
-      var markdown = turndownService.turndown(article.content);
+      let content = article.content;
+
+      console.log(content);
+
+      var markdown = turndownService.turndown(content);
       console.log(article.title);
       console.log(markdown);
+      sendResponse({ content: markdown, title: article.title });
       break;
     case 'generator_header':
       let headerArr = new Array(0, 0, 0, 0, 0, 0);

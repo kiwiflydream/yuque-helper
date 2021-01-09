@@ -85,7 +85,7 @@ export default {
           this.sendSimpleMessageToContentScript({ cmd: 'generator_header', value: '' });
           break;
         case 'clipper':
-          this.sendSimpleMessageToContentScript({ cmd: 'clipper', value: '' });
+          this.openEditor();
           break;
         default:
           break;
@@ -131,6 +131,14 @@ export default {
             });
           });
         }
+      });
+    },
+    // 打开编辑框
+    openEditor() {
+      this.sendMessageToContentScript({ cmd: 'clipper' }, function(response) {
+        chrome.storage.local.set({ tempContent: response.content, tempTitle: response.title }, () => {
+          window.open('/editor/editor.html', '_blank');
+        });
       });
     },
     // 打开设置

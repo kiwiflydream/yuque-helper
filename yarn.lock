@@ -6163,6 +6163,11 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+turndown-plugin-gfm@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/turndown-plugin-gfm/download/turndown-plugin-gfm-1.0.2.tgz#6f8678a361f35220b2bdf5619e6049add75bf1c7"
+  integrity sha1-b4Z4o2HzUiCyvfVhnmBJrddb8cc=
+
 turndown@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npm.taobao.org/turndown/download/turndown-7.0.0.tgz#19b2a6a2d1d700387a1e07665414e4af4fec5225"
@@ -6383,6 +6388,11 @@ vue-loader@^15.4.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-meditor@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npm.taobao.org/vue-meditor/download/vue-meditor-2.1.1.tgz#ba02922cd4b392492cb0b8a0b5b76930b2af3117"
+  integrity sha1-ugKSLNSzkkkssLigtbdpMLKvMRc=
 
 vue-router@^3.0.1:
   version "3.4.9"
