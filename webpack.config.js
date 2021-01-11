@@ -24,6 +24,7 @@ const config = {
   resolve: {
     extensions: ['.js', '.vue'],
   },
+  externals: ['tls', 'net', 'fs'],
   module: {
     rules: [
       {
