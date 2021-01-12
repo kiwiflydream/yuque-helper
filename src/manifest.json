@@ -1,7 +1,7 @@
 {
   "name": "yuque-helper",
   "description": "一个语雀辅助小工具",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "manifest_version": 2,
   "icons": {
     "48": "icons/icon_48.png",
@@ -11,27 +11,16 @@
     "default_title": "yuque-helper",
     "default_popup": "popup/popup.html"
   },
-  "permissions": [
-    "<all_urls>",
-    "*://*/*",
-    "storage",
-    "notifications"
-  ],
+  "permissions": ["<all_urls>", "*://*/*", "storage", "notifications"],
   "homepage_url": "https://blog.coder4j.cn",
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "options_page": "options/options.html",
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content_scripts/test.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["content_scripts/test.js"],
       "run_at": "document_start"
     }
   ]
