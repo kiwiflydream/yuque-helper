@@ -158,6 +158,11 @@ let popupItems = [
     handlerType: 'setting',
     icon: 'el-icon-setting',
   },
+  {
+    title: '帮助 & 反馈',
+    handlerType: 'help',
+    icon: 'el-icon-bangzhu',
+  },
 ];
 
 /**

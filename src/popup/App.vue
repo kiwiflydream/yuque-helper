@@ -79,7 +79,10 @@ export default {
           this.openMarkmap();
           break;
         case 'setting':
-          this.openSetting();
+          this.openUrl('/options/options.html');
+          break;
+        case 'help':
+          this.openUrl('https://www.yuque.com/yag8nv');
           break;
         case 'generator_header':
           this.sendSimpleMessageToContentScript({ cmd: 'generator_header', value: '' });
@@ -141,9 +144,9 @@ export default {
         });
       });
     },
-    // 打开设置
-    openSetting() {
-      window.open('/options/options.html', '_blank');
+    // 打开页面
+    openUrl(url) {
+      window.open(url, '_blank');
     },
     // 添加提示框
     appendColorBlock(imgUrl) {
