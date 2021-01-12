@@ -90,6 +90,10 @@ const config = {
       { from: 'markmap/markmap-autoloader.js', to: 'markmap/markmap-autoloader.js', transform: transformHtml },
       { from: 'markmap/prism-core.min.js', to: 'markmap/prism-core.min.js', transform: transformHtml },
       { from: 'markmap/prism-autoloader.min.js', to: 'markmap/prism-autoloader.min.js', transform: transformHtml },
+      { from: 'markmap/prism.css', to: 'markmap/prism.css', transform: transformHtml },
+      { from: 'markmap/webfontloader.js', to: 'markmap/webfontloader.js', transform: transformHtml },
+      { from: 'markmap/katex.min.css', to: 'markmap/katex.min.css', transform: transformHtml },
+      { from: 'markmap/katex.min.js', to: 'markmap/katex.min.js', transform: transformHtml },
       {
         from: 'manifest.json',
         to: 'manifest.json',
