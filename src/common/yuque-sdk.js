@@ -8,9 +8,15 @@ async function createDoc(article) {
   handlerToken(article.token);
   return await axios.post('/repos/' + article.repo + '/docs', {
     title: article.title,
+    slug: article.slug,
     public: 1,
     body: article.content,
   });
+}
+
+async function readDoc(article) {
+  handlerToken(article.token);
+  return await axios.get('/repos/' + article.repo + '/docs/' + article.slug);
 }
 
 async function getUser(token) {
@@ -22,4 +28,4 @@ function handlerToken(token) {
   axios.defaults.headers.common['X-Auth-Token'] = token;
 }
 
-export { createDoc, getUser };
+export { createDoc, getUser, readDoc };

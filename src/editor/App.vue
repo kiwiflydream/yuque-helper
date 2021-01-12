@@ -61,9 +61,7 @@ export default {
           });
           result
             .then(res => {
-              console.log(res);
               let url = 'https://www.yuque.com' + res.config.url.replace('docs', '').replace('/repos', '') + res.data.data.slug;
-              console.log(url);
               this.$notify({
                 title: '收藏成功',
                 dangerouslyUseHTMLString: true,

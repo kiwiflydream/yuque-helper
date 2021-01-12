@@ -154,6 +154,11 @@ let popupItems = [
     icon: 'el-icon-burger',
   },
   {
+    title: '日记',
+    handlerType: 'diary',
+    icon: 'el-icon-collection',
+  },
+  {
     title: '配置',
     handlerType: 'setting',
     icon: 'el-icon-setting',

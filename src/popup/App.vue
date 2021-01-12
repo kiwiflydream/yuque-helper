@@ -10,8 +10,6 @@
       :key="item.handlerType"
     ></popup-item>
 
-    <block-popover-popup-item @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
-
     <block-popover-popup-item
       @handler="appendColorBlock"
       :items="colorBlockItems"
@@ -29,6 +27,8 @@
       itemWidth="80"
       itemHeight="45"
     ></block-popover-popup-item>
+
+    <block-popover-popup-item @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
   </div>
 </template>
 
@@ -36,6 +36,9 @@
 import BlockPopoverPopupItem from '../componts/BlockPopoverPopupItem.vue';
 import PopupItem from '../componts/PopupItem.vue';
 import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../common/config.js';
+import { createDoc, readDoc } from '../common/yuque-sdk';
+
+var dayjs = require('dayjs');
 
 export default {
   components: { PopupItem, BlockPopoverPopupItem },
@@ -89,6 +92,9 @@ export default {
           break;
         case 'clipper':
           this.openEditor();
+          break;
+        case 'diary':
+          this.openDiary();
           break;
         default:
           break;
@@ -188,6 +194,50 @@ export default {
           this.notify('复制成功', '图书目录');
         } else {
           this.notify('复制失败', '请在目录面使用此功能');
+        }
+      });
+    },
+    openDiary() {
+      chrome.storage.sync.get({ yuqueOption: {} }, res => {
+        let config = res.yuqueOption;
+        if (!config || !config.yuqueToken || !config.yuqueRepo || !config.yuqueUsername) {
+          chrome.notifications.create(null, {
+            type: 'basic',
+            iconUrl: '/icons/icon_48.png',
+            title: '打开失败',
+            message: '请先配置 yuque 信息',
+          });
+        } else {
+          let today = dayjs().format('YYYYMMDD');
+          // 获得当天的文章
+          readDoc({
+            slug: today,
+            token: config.yuqueToken,
+            repo: config.yuqueRepo,
+          })
+            .then(res => {
+              this.openUrl(`https://www.yuque.com/${config.yuqueRepo}/${today}/edit`);
+            })
+            .catch(res => {
+              createDoc({
+                title: dayjs().format('YYYY-MM-DD'),
+                content: '',
+                slug: today,
+                token: config.yuqueToken,
+                repo: config.yuqueRepo,
+              })
+                .then(res => {
+                  this.openUrl(`https://www.yuque.com/${config.yuqueRepo}/${today}/edit`);
+                })
+                .catch(err => {
+                  chrome.notifications.create(null, {
+                    type: 'basic',
+                    iconUrl: '/icons/icon_48.png',
+                    title: '日记生成失败',
+                    message: '原因：' + err.response.data.message,
+                  });
+                });
+            });
         }
       });
     },
