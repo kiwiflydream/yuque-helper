@@ -124,8 +124,11 @@ export default {
     openMarkmap() {
       this.getCurrentTab(tab => {
         if (!tab.url.includes('markdown')) {
-          // 通知
-          this.notify('生成失败', '请在 markdown 视图下打开');
+          this.sendMessageToContentScript({ cmd: 'clipper' }, function(response) {
+            chrome.storage.local.set({ temp: response.content }, () => {
+              window.open('/markmap/markmap.html', '_blank');
+            });
+          });
         } else {
           this.sendMessageToContentScript({ cmd: 'get_markmap' }, function(response) {
             console.log(response);
