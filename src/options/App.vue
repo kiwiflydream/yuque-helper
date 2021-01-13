@@ -45,6 +45,30 @@
         </el-row>
 
         <el-row type="flex" justify="center">
+          <el-col :span="9">
+            <el-form-item label="yuque token" prop="yuqueToken">
+              <el-input v-model="yuqueOption.yuqueToken" placeholder="yuque 应用 token"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="9">
+            <el-form-item label="yuque 用户名" prop="yuqueUsername">
+              <el-input v-model="yuqueOption.yuqueUsername" placeholder="yuque 主页的用户名"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="9">
+            <el-form-item label="保存知识库" prop="yuqueRepo">
+              <el-input v-model="yuqueOption.yuqueRepo" placeholder="保存到的知识库"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
           <el-col :span="3">
             <el-form-item label="阅读评估" prop="readEvaluate">
               <el-switch v-model="yuqueOption.readEvaluate" active-text="开启" inactive-text="关闭"> </el-switch>
@@ -100,13 +124,13 @@ export default {
   },
   created() {
     this.yuqueOption = defaultYuqeuOption;
-    chrome.storage.sync.get({ yuqueOption: this.yuqueOption }, (res) => {
+    chrome.storage.sync.get({ yuqueOption: this.yuqueOption }, res => {
       this.yuqueOption = res.yuqueOption;
     });
   },
   methods: {
     submitForm() {
-      this.$refs['elForm'].validate((valid) => {
+      this.$refs['elForm'].validate(valid => {
         if (!valid) return;
         this.saveOption();
       });
