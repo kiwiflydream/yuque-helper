@@ -10,11 +10,12 @@ const config = {
   mode: process.env.NODE_ENV,
   context: __dirname + '/src',
   entry: {
-    'background': './background.js',
+    background: './background.js',
     'popup/popup': './popup/popup.js',
     'options/options': './options/options.js',
     'content_scripts/test': './content_scripts/test.js',
     'markmap/markmap': './markmap/markmap.js',
+    'editor/editor': './editor/editor.js',
   },
   output: {
     path: __dirname + '/dist',
@@ -23,6 +24,7 @@ const config = {
   resolve: {
     extensions: ['.js', '.vue'],
   },
+  externals: ['tls', 'net', 'fs'],
   module: {
     rules: [
       {
@@ -81,16 +83,21 @@ const config = {
       { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       { from: 'options/options.html', to: 'options/options.html', transform: transformHtml },
       { from: 'markmap/markmap.html', to: 'markmap/markmap.html', transform: transformHtml },
+      { from: 'editor/editor.html', to: 'editor/editor.html', transform: transformHtml },
       { from: 'markmap/d3@6.3.0.js', to: 'markmap/d3@6.3.0.js', transform: transformHtml },
       { from: 'markmap/markmap-lib@0.11.1.js', to: 'markmap/markmap-lib@0.11.1.js', transform: transformHtml },
       { from: 'markmap/markmap-view@0.2.1.js', to: 'markmap/markmap-view@0.2.1.js', transform: transformHtml },
       { from: 'markmap/markmap-autoloader.js', to: 'markmap/markmap-autoloader.js', transform: transformHtml },
       { from: 'markmap/prism-core.min.js', to: 'markmap/prism-core.min.js', transform: transformHtml },
       { from: 'markmap/prism-autoloader.min.js', to: 'markmap/prism-autoloader.min.js', transform: transformHtml },
+      { from: 'markmap/prism.css', to: 'markmap/prism.css', transform: transformHtml },
+      { from: 'markmap/webfontloader.js', to: 'markmap/webfontloader.js', transform: transformHtml },
+      { from: 'markmap/katex.min.css', to: 'markmap/katex.min.css', transform: transformHtml },
+      { from: 'markmap/katex.min.js', to: 'markmap/katex.min.js', transform: transformHtml },
       {
         from: 'manifest.json',
         to: 'manifest.json',
-        transform: (content) => {
+        transform: content => {
           const jsonContent = JSON.parse(content);
           jsonContent.version = version;
 

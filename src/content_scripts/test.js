@@ -1,11 +1,11 @@
-var $ = require("jquery");
-const {
-  bishengFormat
-} = require("bisheng-formatter-core");
+var $ = require('jquery');
+const { bishengFormat } = require('bisheng-formatter-core');
 
-const { removeAllBlank, getSaleConfig } = require("../common/utils.js")
+const { removeAllBlank, getSaleConfig, insertContent } = require('../common/utils.js');
 import { defaultYuqeuOption } from '../common/config.js';
-
+var { Readability } = require('@mozilla/readability');
+var TurndownService = require('turndown').default;
+var turndownPluginGfm = require('turndown-plugin-gfm');
 
 const config = {
   mainFeature: {
@@ -48,7 +48,7 @@ const config = {
     halfWidthCharsAndFollowingSpaces: true,
 
     /* 决定是否在中文和英文之间添加空格 */
-    addSpacesBetweenChineseCharAndAlphabeticalChar: true
+    addSpacesBetweenChineseCharAndAlphabeticalChar: true,
   },
 
   /* 
@@ -64,62 +64,69 @@ const config = {
     true: 使用 (""'') 替换 (“”‘’)
     false: 使用 (『』「」) 替换 (“”‘’)
   */
-  useSimpleQuotation: false
-}
+  useSimpleQuotation: false,
+};
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   let currentTabUrl = window.location.href;
   if (currentTabUrl.includes('yuque')) {
     // 字体替换
-    chrome.storage.sync.get({ yuqueOption: defaultYuqeuOption }, (res) => {
+    chrome.storage.sync.get({ yuqueOption: defaultYuqeuOption }, res => {
       let option = res.yuqueOption;
       if (option.fonts) {
         // 当前页面设置字体
-        $("*").css("font-family", option.fonts);
+        $('*').css('font-family', option.fonts);
         // 文章内容是异步加载的，延迟再设置一次，但是网速过慢还是有问题，待优化
         setTimeout(() => {
-          $("*").css("font-family", option.fonts);
+          $('*').css('font-family', option.fonts);
         }, 500);
 
         setTimeout(() => {
-          $("*").css("font-family", option.fonts);
+          $('*').css('font-family', option.fonts);
         }, 1000);
 
         setTimeout(() => {
-          $("*").css("font-family", option.fonts);
+          $('*').css('font-family', option.fonts);
         }, 3000);
       }
-    })
+    });
 
-    chrome.storage.sync.get({ yuqueOption: defaultYuqeuOption }, (res) => {
+    chrome.storage.sync.get({ yuqueOption: defaultYuqeuOption }, res => {
       let option = res.yuqueOption;
 
       // 统计编辑面文字数
       if (currentTabUrl.endsWith('edit')) {
         if (getSaleConfig(option, 'wordCount')) {
           setInterval(() => {
-            let spanCount = $(".lark-editor-save-tip").children('span').length;
-            let totlaCount = removeAllBlank($(".lake-content-editor-core").text()).length;
+            let spanCount = $('.lark-editor-save-tip').children('span').length;
+            let totlaCount = removeAllBlank($('.lake-content-editor-core').text()).length;
             let totalWordCount = getWordCount(totlaCount, '.lake-content-editor-core');
             if (spanCount <= 1) {
-              $(".lark-editor-save-tip").append(`<span>&nbsp;(${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})</span>`)
+              $('.lark-editor-save-tip').append(`<span>&nbsp;(${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})</span>`);
             } else {
-              $(".lark-editor-save-tip").children('span').last().text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
+              $('.lark-editor-save-tip')
+                .children('span')
+                .last()
+                .text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
             }
           }, 500);
         }
-
       } else {
         if (getSaleConfig(option, 'readEvaluate')) {
           // 统计阅读时间
           // 这里不能使用，setTimeout，因为通过目录点击，不会重新加载页面
           setInterval(() => {
-            let spanCount = $("#header > div > div.header-crumb > span").children('span').length;
-            let wordCount = getWordCount(removeAllBlank($("#content").text()).length, '#content');
+            let spanCount = $('#header > div > div.header-crumb > span').children('span').length;
+            let wordCount = getWordCount(removeAllBlank($('#content').text()).length, '#content');
             if (spanCount <= 1) {
-              $("#header > div > div.header-crumb > span").last().append(`<span>&nbsp;(需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)</span>`)
+              $('#header > div > div.header-crumb > span')
+                .last()
+                .append(`<span>&nbsp;(需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)</span>`);
             } else {
-              $("#header > div > div.header-crumb > span").children('span').last().text(` (需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)`);
+              $('#header > div > div.header-crumb > span')
+                .children('span')
+                .last()
+                .text(` (需阅读 ${Math.ceil(wordCount / option.readWordCount)} 分钟)`);
             }
           }, 1000);
         }
@@ -127,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
-
 
 /**
  * 获得单词总数
@@ -151,24 +157,25 @@ function getWordCount(totalWordCount, rootSel) {
   let cardWord = removeAllBlank(root.find('div[data-card-element="center"]').text()).length;
 
   // 无效字符
-  let invalidWordCount = Math.max(imageMaskWord, 0)
-    + Math.max(docCardWord, 0)
-    + Math.max(dropdownWord, 0)
-    + Math.max(cardselectWord, 0)
-    + Math.max(mathWord, 0)
-    + Math.max(mathToolWord, 0)
-    + Math.max(cardWord, 0)
-    + Math.max(cardInlineWord, 0);
+  let invalidWordCount =
+    Math.max(imageMaskWord, 0) +
+    Math.max(docCardWord, 0) +
+    Math.max(dropdownWord, 0) +
+    Math.max(cardselectWord, 0) +
+    Math.max(mathWord, 0) +
+    Math.max(mathToolWord, 0) +
+    Math.max(cardWord, 0) +
+    Math.max(cardInlineWord, 0);
 
   const totalCount = totalWordCount - invalidWordCount;
   return totalCount < 0 ? 0 : totalCount;
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'toc':
       let headMk = '';
-      $(".lake-content-editor-core :header").each(function () {
+      $('.lake-content-editor-core :header').each(function() {
         let tagName = $(this)[0].tagName;
         let title = $(this).text();
         let id = $(this).attr('id');
@@ -177,43 +184,43 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           headMk += `<a href="${window.location.href.slice(0, -5)}#${id}">${head}${title}</a>` + '<br/>';
         }
       });
-      $(".lake-content-editor-core").prepend(headMk + '<br/>');
+      $('.lake-content-editor-core').prepend(headMk + '<br/>');
       break;
     // 添加图片
     case 'append_img':
-      $(".lake-content-editor-core").append(`<img src="${request.value}">`);
+      $('.lake-content-editor-core').append(`<img src="${request.value}">`);
       break;
     case 'append_color_block':
-      $(".lake-content-editor-core").append(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
+      insertContent(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
       break;
     case 'append_color_header':
-      $(".lake-content-editor-core").append(`<p><span style="background-color: ${request.value};"> </span> </p>`);
+      insertContent(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;
     case 'prepend_img':
-      $(".lake-content-editor-core").prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
+      $('.lake-content-editor-core').prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
       break;
-    // 缩进    
+    // 缩进
     case 'prepend_blank':
-      $(".lake-content-editor-core p:not(:has(span))").each(function () {
+      $('.lake-content-editor-core p:not(:has(span))').each(function() {
         let content = $(this).text();
         if (!/^\s*$/.test(content)) {
           $(this).text('  ' + content.trim());
         }
       });
       break;
-    // 格式化文本    
+    // 格式化文本
     case 'format_content':
-      $(".lake-content-editor-core p:not(:has(span))").each(function () {
+      $('.lake-content-editor-core p:not(:has(span))').each(function() {
         let content = $(this).text();
         if (!/^\s*$/.test(content)) {
           $(this).text(bishengFormat(content, config));
         }
       });
       break;
-    // 获得书籍   
+    // 获得书籍
     case 'get_books':
       let urls = '';
-      $(".ant-tree-list-holder-inner a").each(function () {
+      $('.ant-tree-list-holder-inner a').each(function() {
         let aTag = $(this);
         let href = aTag.attr('href');
         let title = aTag.attr('title');
@@ -226,16 +233,51 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }
         }
       });
-      sendResponse(urls)
+      sendResponse(urls);
       break;
-    // 获得 markmap 文本  
+    // 获得 markmap 文本
     case 'get_markmap':
       let markdownText = $('pre').text();
       sendResponse(markdownText);
       break;
+    // 剪藏
+    case 'clipper':
+      // 正文提取
+      var documentClone = document.cloneNode(true);
+
+      // 排除
+      // 不知道原理，直接 remove 无效，好像只支持通过 getElementById 才能删除
+      let array = documentClone.getElementsByClassName('lake-image-mask-point');
+      for (let index = 0; index < array.length; index++) {
+        array[index].innerText = '';
+      }
+      var article = new Readability(documentClone).parse();
+
+      // html -> markdown
+      var turndownService = new TurndownService({ codeBlockStyle: 'fenced', preformattedCode: true });
+      turndownService.addRule('code', {
+        filter: ['code'],
+        replacement: function(content) {
+          return '```' + content + '```';
+        },
+      });
+      var gfm = turndownPluginGfm.gfm;
+      var tables = turndownPluginGfm.tables;
+      turndownService.use(gfm);
+      turndownService.use(tables);
+
+      let content = article.content;
+
+      console.log(content);
+
+      var markdown = turndownService.turndown(content);
+      console.log(article.title);
+      console.log(markdown);
+      sendResponse({ content: markdown, title: article.title });
+      break;
     case 'generator_header':
       let headerArr = new Array(0, 0, 0, 0, 0, 0);
-      $(".lake-content-editor-core :header").each(function () {
+      $('.lake-content-editor-core :header').each(function() {
         let tagName = $(this)[0].tagName;
         let tagNumber = tagName[1];
         let title = $(this).text();
@@ -251,7 +293,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         for (let index = tagNumber; index < headerArr.length; index++) {
           headerArr[index] = 0;
         }
-        let header = headerArr.join('.').split('.0').join('').split('0.').join('') + ' ';
+        let header =
+          headerArr
+            .join('.')
+            .split('.0')
+            .join('')
+            .split('0.')
+            .join('') + ' ';
         $(this).text(header + title);
       });
       break;
