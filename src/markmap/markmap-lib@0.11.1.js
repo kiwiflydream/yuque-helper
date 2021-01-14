@@ -2286,7 +2286,13 @@
     return (
       !(e >= 55296 && e <= 57343) &&
       !(e >= 64976 && e <= 65007) &&
-        65535 != (65535 & e) && 65534 != (65535 & e) && !(e >= 0 && e <= 8) && 11 !== e && !(e >= 14 && e <= 31) && !(e >= 127 && e <= 159) && !(e > 1114111)
+      65535 != (65535 & e) &&
+      65534 != (65535 & e) &&
+      !(e >= 0 && e <= 8) &&
+      11 !== e &&
+      !(e >= 14 && e <= 31) &&
+      !(e >= 127 && e <= 159) &&
+      !(e > 1114111)
     );
   }
   function x(e) {
@@ -3383,28 +3389,28 @@
         return (
           a !== c + 2 &&
           !(a + 1 >= p || 58 !== e.src.charCodeAt(++a)) &&
-            (n ||
-              (a++,
-              e.env.footnotes || (e.env.footnotes = {}),
-              e.env.footnotes.refs || (e.env.footnotes.refs = {}),
-              (l = e.src.slice(c + 2, a - 2)),
-              (e.env.footnotes.refs[':' + l] = -1),
-              e.tokens.push({ type: 'footnote_reference_open', label: l, level: e.level++ }),
-              (o = e.bMarks[r]),
-              (s = e.tShift[r]),
-              (i = e.parentType),
-              (e.tShift[r] = e.skipSpaces(a) - a),
-              (e.bMarks[r] = a),
-              (e.blkIndent += 4),
-              (e.parentType = 'footnote'),
-              e.tShift[r] < e.blkIndent && ((e.tShift[r] += e.blkIndent), (e.bMarks[r] -= e.blkIndent)),
-              e.parser.tokenize(e, r, t, !0),
-              (e.parentType = i),
-              (e.blkIndent -= 4),
-              (e.tShift[r] = s),
-              (e.bMarks[r] = o),
-              e.tokens.push({ type: 'footnote_reference_close', level: --e.level })),
-            !0)
+          (n ||
+            (a++,
+            e.env.footnotes || (e.env.footnotes = {}),
+            e.env.footnotes.refs || (e.env.footnotes.refs = {}),
+            (l = e.src.slice(c + 2, a - 2)),
+            (e.env.footnotes.refs[':' + l] = -1),
+            e.tokens.push({ type: 'footnote_reference_open', label: l, level: e.level++ }),
+            (o = e.bMarks[r]),
+            (s = e.tShift[r]),
+            (i = e.parentType),
+            (e.tShift[r] = e.skipSpaces(a) - a),
+            (e.bMarks[r] = a),
+            (e.blkIndent += 4),
+            (e.parentType = 'footnote'),
+            e.tShift[r] < e.blkIndent && ((e.tShift[r] += e.blkIndent), (e.bMarks[r] -= e.blkIndent)),
+            e.parser.tokenize(e, r, t, !0),
+            (e.parentType = i),
+            (e.blkIndent -= 4),
+            (e.tShift[r] = s),
+            (e.bMarks[r] = o),
+            e.tokens.push({ type: 'footnote_reference_close', level: --e.level })),
+          !0)
         );
       },
       ['paragraph'],
@@ -3444,17 +3450,17 @@
         return (
           !(i >= t) &&
           !(e.tShift[i] < e.blkIndent) &&
-            !(e.tShift[i] - e.blkIndent > 3) &&
-              !((o = e.bMarks[i] + e.tShift[i]) >= (s = e.eMarks[i])) &&
-                (45 === (n = e.src.charCodeAt(o)) || 61 === n) &&
-                  ((o = e.skipChars(o, n)),
-                  !((o = e.skipSpaces(o)) < s) &&
-                    ((o = e.bMarks[r] + e.tShift[r]),
-                    (e.line = i + 1),
-                    e.tokens.push({ type: 'heading_open', hLevel: 61 === n ? 1 : 2, lines: [r, e.line], level: e.level }),
-                    e.tokens.push({ type: 'inline', content: e.src.slice(o, e.eMarks[r]).trim(), level: e.level + 1, lines: [r, e.line - 1], children: [] }),
-                    e.tokens.push({ type: 'heading_close', hLevel: 61 === n ? 1 : 2, level: e.level }),
-                    !0))
+          !(e.tShift[i] - e.blkIndent > 3) &&
+          !((o = e.bMarks[i] + e.tShift[i]) >= (s = e.eMarks[i])) &&
+          (45 === (n = e.src.charCodeAt(o)) || 61 === n) &&
+          ((o = e.skipChars(o, n)),
+          !((o = e.skipSpaces(o)) < s) &&
+            ((o = e.bMarks[r] + e.tShift[r]),
+            (e.line = i + 1),
+            e.tokens.push({ type: 'heading_open', hLevel: 61 === n ? 1 : 2, lines: [r, e.line], level: e.level }),
+            e.tokens.push({ type: 'inline', content: e.src.slice(o, e.eMarks[r]).trim(), level: e.level + 1, lines: [r, e.line - 1], children: [] }),
+            e.tokens.push({ type: 'heading_close', hLevel: 61 === n ? 1 : 2, level: e.level }),
+            !0))
         );
       },
     ],
@@ -4293,25 +4299,25 @@
         return (
           !(a + 2 >= i) &&
           94 === e.src.charCodeAt(a) &&
-            91 === e.src.charCodeAt(a + 1) &&
-              !(e.level >= e.options.maxNesting) &&
-                ((t = a + 2),
-                !((n = j(e, a + 1)) < 0) &&
-                  (r ||
-                    (e.env.footnotes || (e.env.footnotes = {}),
-                    e.env.footnotes.list || (e.env.footnotes.list = []),
-                    (o = e.env.footnotes.list.length),
-                    (e.pos = t),
-                    (e.posMax = n),
-                    e.push({ type: 'footnote_ref', id: o, level: e.level }),
-                    e.linkLevel++,
-                    (s = e.tokens.length),
-                    e.parser.tokenize(e),
-                    (e.env.footnotes.list[o] = { tokens: e.tokens.splice(s) }),
-                    e.linkLevel--),
-                  (e.pos = n + 1),
-                  (e.posMax = i),
-                  !0))
+          91 === e.src.charCodeAt(a + 1) &&
+          !(e.level >= e.options.maxNesting) &&
+          ((t = a + 2),
+          !((n = j(e, a + 1)) < 0) &&
+            (r ||
+              (e.env.footnotes || (e.env.footnotes = {}),
+              e.env.footnotes.list || (e.env.footnotes.list = []),
+              (o = e.env.footnotes.list.length),
+              (e.pos = t),
+              (e.posMax = n),
+              e.push({ type: 'footnote_ref', id: o, level: e.level }),
+              e.linkLevel++,
+              (s = e.tokens.length),
+              e.parser.tokenize(e),
+              (e.env.footnotes.list[o] = { tokens: e.tokens.splice(s) }),
+              e.linkLevel--),
+            (e.pos = n + 1),
+            (e.posMax = i),
+            !0))
         );
       },
     ],
@@ -4337,20 +4343,20 @@
         return (
           n !== a + 2 &&
           !(n >= i) &&
-            (n++,
-            (t = e.src.slice(a + 2, n - 1)),
-            void 0 !== e.env.footnotes.refs[':' + t] &&
-              (r ||
-                (e.env.footnotes.list || (e.env.footnotes.list = []),
-                e.env.footnotes.refs[':' + t] < 0
-                  ? ((o = e.env.footnotes.list.length), (e.env.footnotes.list[o] = { label: t, count: 0 }), (e.env.footnotes.refs[':' + t] = o))
-                  : (o = e.env.footnotes.refs[':' + t]),
-                (s = e.env.footnotes.list[o].count),
-                e.env.footnotes.list[o].count++,
-                e.push({ type: 'footnote_ref', id: o, subId: s, level: e.level })),
-              (e.pos = n),
-              (e.posMax = i),
-              !0))
+          (n++,
+          (t = e.src.slice(a + 2, n - 1)),
+          void 0 !== e.env.footnotes.refs[':' + t] &&
+            (r ||
+              (e.env.footnotes.list || (e.env.footnotes.list = []),
+              e.env.footnotes.refs[':' + t] < 0
+                ? ((o = e.env.footnotes.list.length), (e.env.footnotes.list[o] = { label: t, count: 0 }), (e.env.footnotes.refs[':' + t] = o))
+                : (o = e.env.footnotes.refs[':' + t]),
+              (s = e.env.footnotes.list[o].count),
+              e.env.footnotes.list[o].count++,
+              e.push({ type: 'footnote_ref', id: o, subId: s, level: e.level })),
+            (e.pos = n),
+            (e.posMax = i),
+            !0))
         );
       },
     ],
@@ -4366,25 +4372,25 @@
         return (
           60 === e.src.charCodeAt(a) &&
           !((t = e.src.slice(a)).indexOf('>') < 0) &&
-            ((n = t.match(Ce))
-              ? !(qe.indexOf(n[1].toLowerCase()) < 0) &&
-                ((i = B((s = n[0].slice(1, -1)))),
-                !!e.parser.validateLink(s) &&
-                  (r ||
-                    (e.push({ type: 'link_open', href: i, level: e.level }),
-                    e.push({ type: 'text', content: s, level: e.level + 1 }),
-                    e.push({ type: 'link_close', level: e.level })),
-                  (e.pos += n[0].length),
-                  !0))
-              : !!(o = t.match(Ae)) &&
-                ((i = B('mailto:' + (s = o[0].slice(1, -1)))),
-                !!e.parser.validateLink(i) &&
-                  (r ||
-                    (e.push({ type: 'link_open', href: i, level: e.level }),
-                    e.push({ type: 'text', content: s, level: e.level + 1 }),
-                    e.push({ type: 'link_close', level: e.level })),
-                  (e.pos += o[0].length),
-                  !0)))
+          ((n = t.match(Ce))
+            ? !(qe.indexOf(n[1].toLowerCase()) < 0) &&
+              ((i = B((s = n[0].slice(1, -1)))),
+              !!e.parser.validateLink(s) &&
+                (r ||
+                  (e.push({ type: 'link_open', href: i, level: e.level }),
+                  e.push({ type: 'text', content: s, level: e.level + 1 }),
+                  e.push({ type: 'link_close', level: e.level })),
+                (e.pos += n[0].length),
+                !0))
+            : !!(o = t.match(Ae)) &&
+              ((i = B('mailto:' + (s = o[0].slice(1, -1)))),
+              !!e.parser.validateLink(i) &&
+                (r ||
+                  (e.push({ type: 'link_open', href: i, level: e.level }),
+                  e.push({ type: 'text', content: s, level: e.level + 1 }),
+                  e.push({ type: 'link_close', level: e.level })),
+                (e.pos += o[0].length),
+                !0)))
         );
       },
     ],
@@ -4408,7 +4414,8 @@
                 return r >= 97 && r <= 122;
               })(t)
             ) &&
-              !!(n = e.src.slice(s).match(Te)) && (r || e.push({ type: 'htmltag', content: e.src.slice(s, s + n[0].length), level: e.level }), (e.pos += n[0].length), !0))
+            !!(n = e.src.slice(s).match(Te)) &&
+            (r || e.push({ type: 'htmltag', content: e.src.slice(s, s + n[0].length), level: e.level }), (e.pos += n[0].length), !0))
         );
       },
     ],
