@@ -181,6 +181,7 @@ let defaultYuqeuOption = {
   countCoefficient: 1,
   wordCount: true,
   readEvaluate: true,
+  closeRedDot: false,
 };
 
 export { mood, colorBlockItems, colorHeaderItems, popupItems, defaultYuqeuOption };

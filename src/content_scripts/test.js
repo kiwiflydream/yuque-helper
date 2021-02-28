@@ -94,6 +94,22 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.sync.get({ yuqueOption: defaultYuqeuOption }, res => {
       let option = res.yuqueOption;
 
+      // 删除发现上的小红点
+      if (getSaleConfig(option, 'closeRedDot')) {
+        setTimeout(() => {
+          $('a[href="/explore/events"] > span > sup').remove();
+        }, 50);
+        setTimeout(() => {
+          $('a[href="/explore/events"] > span > sup').remove();
+        }, 100);
+        setTimeout(() => {
+          $('a[href="/explore/events"] > span > sup').remove();
+        }, 500);
+        setTimeout(() => {
+          $('a[href="/explore/events"] > span > sup').remove();
+        }, 1000);
+      }
+
       // 统计编辑面文字数
       if (currentTabUrl.endsWith('edit')) {
         if (getSaleConfig(option, 'wordCount')) {

@@ -79,6 +79,11 @@
               <el-switch v-model="yuqueOption.wordCount" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-form-item label="提示小红点" prop="closeRedDot">
+              <el-switch v-model="yuqueOption.closeRedDot" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <el-row type="flex" justify="center">
