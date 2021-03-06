@@ -227,9 +227,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // 格式化文本
     case 'format_content':
       $('.lake-content-editor-core p:not(:has(span))').each(function() {
-        let content = $(this).text();
+        let content = $(this).html();
         if (!/^\s*$/.test(content)) {
-          $(this).text(bishengFormat(content, config));
+          $(this).html(bishengFormat(content, config));
         }
       });
       break;
