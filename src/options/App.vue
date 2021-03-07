@@ -1,7 +1,7 @@
 <template>
   <div class="parent">
     <el-card class="box-card">
-      <el-form ref="elForm" :model="yuqueOption" :rules="rules" size="mini" label-width="100px">
+      <el-form ref="elForm" :model="yuqueOption" :rules="rules" size="mini" label-width="110px">
         <el-row type="flex" justify="center">
           <el-col :span="9">
             <el-form-item label="字体名称" prop="fonts">
@@ -69,19 +69,53 @@
         </el-row>
 
         <el-row type="flex" justify="center">
-          <el-col :span="3">
+          <el-col :span="4">
             <el-form-item label="阅读评估" prop="readEvaluate">
               <el-switch v-model="yuqueOption.readEvaluate" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="4">
             <el-form-item label="字数统计" prop="wordCount">
               <el-switch v-model="yuqueOption.wordCount" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="4">
             <el-form-item label="提示小红点" prop="closeRedDot">
               <el-switch v-model="yuqueOption.closeRedDot" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="全角字符格式化" prop="fullWidthCharsAndFollowingSpaces">
+              <el-switch v-model="yuqueOption.fullWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="4">
+            <el-form-item label="半角字符格式化" prop="halfWidthCharsAndFollowingSpaces">
+              <el-switch v-model="yuqueOption.halfWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="全角引号替换" prop="useSimpleQuotation">
+              <el-switch v-model="yuqueOption.useSimpleQuotation" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="4">
+            <el-form-item label="中英文添加空格" prop="addSpacesBetweenChineseCharAndAlphabeticalChar">
+              <el-switch v-model="yuqueOption.addSpacesBetweenChineseCharAndAlphabeticalChar" active-text="开启" inactive-text="关闭"> </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="连续符号格式化" prop="duplicatedPunctuations">
+              <el-switch v-model="yuqueOption.duplicatedPunctuations" active-text="开启" inactive-text="关闭"> </el-switch>
             </el-form-item>
           </el-col>
         </el-row>

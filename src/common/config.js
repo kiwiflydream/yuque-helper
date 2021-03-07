@@ -182,6 +182,11 @@ let defaultYuqeuOption = {
   wordCount: true,
   readEvaluate: true,
   closeRedDot: false,
+  duplicatedPunctuations: true,
+  fullWidthCharsAndFollowingSpaces: true,
+  halfWidthCharsAndFollowingSpaces: true,
+  addSpacesBetweenChineseCharAndAlphabeticalChar: true,
+  useSimpleQuotation: true,
 };
 
 export { mood, colorBlockItems, colorHeaderItems, popupItems, defaultYuqeuOption };
