@@ -24,8 +24,13 @@ async function getUser(token) {
   return await axios.get('/user');
 }
 
+async function findDocs(repoAndToken) {
+  handlerToken(repoAndToken.token);
+  return await axios.get(`/repos/${repoAndToken.repo}/docs`);
+}
+
 function handlerToken(token) {
   axios.defaults.headers.common['X-Auth-Token'] = token;
 }
 
-export { createDoc, getUser, readDoc };
+export { createDoc, getUser, readDoc, findDocs };

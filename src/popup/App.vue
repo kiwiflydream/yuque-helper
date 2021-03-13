@@ -36,7 +36,8 @@
 import BlockPopoverPopupItem from '../componts/BlockPopoverPopupItem.vue';
 import PopupItem from '../componts/PopupItem.vue';
 import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../common/config.js';
-import { createDoc, readDoc } from '../common/yuque-sdk';
+import { createDoc, readDoc, findDocs } from '../common/yuque-sdk';
+import { randomNum } from '../common/utils';
 
 var dayjs = require('dayjs');
 
@@ -95,6 +96,9 @@ export default {
           break;
         case 'diary':
           this.openDiary();
+          break;
+        case 'randomWalk':
+          this.randomWalk();
           break;
         case 'lower_header':
           this.sendSimpleMessageToContentScript({ cmd: 'lower_header', value: '' });
@@ -191,6 +195,37 @@ export default {
       transfer.blur();
       console.log('复制成功');
       document.body.removeChild(transfer);
+    },
+    // 随机漫步
+    randomWalk() {
+      chrome.storage.sync.get({ yuqueOption: {} }, res => {
+        let config = res.yuqueOption;
+        if (!config || !config.yuqueToken || !config.yuqueRepo || !config.yuqueUsername) {
+          chrome.notifications.create(null, {
+            type: 'basic',
+            iconUrl: '/icons/icon_48.png',
+            title: '打开失败',
+            message: '请先配置 yuque 信息',
+          });
+        } else {
+          findDocs({
+            token: config.yuqueToken,
+            repo: config.yuqueRepo,
+          })
+            .then(res => {
+              var list = res.data.data;
+              this.openUrl(`https://www.yuque.com/${config.yuqueRepo}/${list[randomNum(0, list.length)].slug}`);
+            })
+            .catch(res => {
+              chrome.notifications.create(null, {
+                type: 'basic',
+                iconUrl: '/icons/icon_48.png',
+                title: '漫步失败',
+                message: '原因：' + err.response.data.message,
+              });
+            });
+        }
+      });
     },
     // 获得书籍目标
     getBooks() {

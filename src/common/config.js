@@ -159,6 +159,11 @@ let popupItems = [
     icon: 'el-icon-collection',
   },
   {
+    title: '随机漫步',
+    handlerType: 'randomWalk',
+    icon: 'el-icon-magic-stick',
+  },
+  {
     title: '标题降级',
     handlerType: 'lower_header',
     icon: 'el-icon-bottom',
