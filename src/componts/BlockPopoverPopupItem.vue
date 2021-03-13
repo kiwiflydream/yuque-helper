@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="top" width="160" trigger="click">
+  <el-popover v-show="isShow" placement="top" width="160" trigger="click">
     <el-image
       :style="{ width: itemWidth + 'px', height: itemHeight + 'px' }"
       @click="handler(item.value)"
@@ -21,7 +21,7 @@
 
 <script>
 module.exports = {
-  data: function () {
+  data: function() {
     return {};
   },
   props: {
@@ -35,6 +35,11 @@ module.exports = {
       default: '',
       required: true,
     },
+    //   是否显示
+    isShow: {
+      type: Boolean,
+      default: true,
+    },
     icon: {
       type: String,
       default: '',
@@ -42,12 +47,12 @@ module.exports = {
     },
     itemWidth: {
       type: String,
-      default: "40",
+      default: '40',
       required: false,
     },
     itemHeight: {
       type: String,
-      default: "40",
+      default: '40',
       required: false,
     },
   },

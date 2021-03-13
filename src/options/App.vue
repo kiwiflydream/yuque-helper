@@ -95,6 +95,19 @@
 
       <el-row type="flex" justify="center">
         <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="关闭提示小红点" prop="closeRedDot">
+            <el-switch v-model="yuqueOption.closeRedDot" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="全角字符格式化" prop="fullWidthCharsAndFollowingSpaces">
+            <el-switch v-model="yuqueOption.fullWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
           <el-form-item label="半角字符格式化" prop="halfWidthCharsAndFollowingSpaces">
             <el-switch v-model="yuqueOption.halfWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
           </el-form-item>
@@ -105,16 +118,133 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="center">
+        <el-col :xs="24" :sm="16" :md="14" :lg="12" :xl="8">
+          <el-divider>菜单项配置</el-divider>
+        </el-col>
+      </el-row>
 
       <el-row type="flex" justify="center">
         <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
-          <el-form-item label="中英文添加空格" prop="addSpacesBetweenChineseCharAndAlphabeticalChar">
-            <el-switch v-model="yuqueOption.addSpacesBetweenChineseCharAndAlphabeticalChar" active-text="开启" inactive-text="关闭"> </el-switch>
+          <el-form-item label="Markdown视图" prop="markdown">
+            <el-switch v-model="yuqueOption.markdown" active-text="开启" inactive-text="关闭"> </el-switch>
           </el-form-item>
         </el-col>
         <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
-          <el-form-item label="连续符号格式化" prop="duplicatedPunctuations">
-            <el-switch v-model="yuqueOption.duplicatedPunctuations" active-text="开启" inactive-text="关闭"> </el-switch>
+          <el-form-item label="Html 视图" prop="html">
+            <el-switch v-model="yuqueOption.html" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="复制 Url" prop="copyUrl">
+            <el-switch v-model="yuqueOption.copyUrl" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="生成 TOC" prop="toc">
+            <el-switch v-model="yuqueOption.toc" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="插入 Bing 图片" prop="prepend_img">
+            <el-switch v-model="yuqueOption.prepend_img" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="首行缩进" prop="prepend_blank">
+            <el-switch v-model="yuqueOption.prepend_blank" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="获得目录列表" prop="get_books">
+            <el-switch v-model="yuqueOption.get_books" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="转成思维导图" prop="markmap">
+            <el-switch v-model="yuqueOption.markmap" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="生成编号" prop="generator_header">
+            <el-switch v-model="yuqueOption.generator_header" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="网页转存" prop="clipper">
+            <el-switch v-model="yuqueOption.clipper" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="日记" prop="diary">
+            <el-switch v-model="yuqueOption.diary" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="随机漫步" prop="randomWalk">
+            <el-switch v-model="yuqueOption.randomWalk" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="标题降级" prop="lower_header">
+            <el-switch v-model="yuqueOption.lower_header" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="标题升级" prop="up_header">
+            <el-switch v-model="yuqueOption.up_header" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="配置" prop="setting">
+            <el-switch v-model="yuqueOption.setting" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="帮助 & 反馈" prop="help">
+            <el-switch v-model="yuqueOption.help" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="插入提示框" prop="colorPopup">
+            <el-switch v-model="yuqueOption.colorPopup" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="彩色标题头" prop="colorHeaderPopup">
+            <el-switch v-model="yuqueOption.colorHeaderPopup" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="插入表情" prop="moodPopup">
+            <el-switch v-model="yuqueOption.moodPopup" active-text="开启" inactive-text="关闭"> </el-switch>
           </el-form-item>
         </el-col>
       </el-row>

@@ -11,6 +11,7 @@
     ></popup-item>
 
     <block-popover-popup-item
+      :isShow="colorPopup"
       @handler="appendColorBlock"
       :items="colorBlockItems"
       title="插入提示框"
@@ -20,6 +21,7 @@
     ></block-popover-popup-item>
 
     <block-popover-popup-item
+      :isShow="colorHeaderPopup"
       @handler="appendColorHeader"
       :items="colorHeaderItems"
       title="插入彩色标题头"
@@ -28,14 +30,14 @@
       itemHeight="45"
     ></block-popover-popup-item>
 
-    <block-popover-popup-item @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
+    <block-popover-popup-item :isShow="moodPopup" @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
   </div>
 </template>
 
 <script>
 import BlockPopoverPopupItem from '../componts/BlockPopoverPopupItem.vue';
 import PopupItem from '../componts/PopupItem.vue';
-import { mood, colorBlockItems, colorHeaderItems, popupItems } from '../common/config.js';
+import { mood, colorBlockItems, colorHeaderItems, popupItems, defaultYuqeuOption } from '../common/config.js';
 import { createDoc, readDoc, findDocs } from '../common/yuque-sdk';
 import { randomNum } from '../common/utils';
 
@@ -45,7 +47,10 @@ export default {
   components: { PopupItem, BlockPopoverPopupItem },
   data() {
     return {
-      popupItems: popupItems,
+      colorPopup: true,
+      colorHeaderPopup: true,
+      moodPopup: true,
+      popupItems,
       imgItems: mood,
       colorBlockItems: colorBlockItems,
       colorHeaderItems: colorHeaderItems,
@@ -322,6 +327,20 @@ export default {
         });
       });
     },
+  },
+  created() {
+    this.yuqueOption = defaultYuqeuOption;
+    chrome.storage.sync.get({ yuqueOption: this.yuqueOption }, res => {
+      this.yuqueOption = res.yuqueOption;
+      popupItems.map(it => {
+        it.isShow = this.yuqueOption[it.handlerType];
+        return it;
+      });
+      this.popupItems = popupItems;
+      this.colorPopup = this.yuqueOption['colorPopup'];
+      this.colorHeaderPopup = this.yuqueOption['colorHeaderPopup'];
+      this.moodPopup = this.yuqueOption['moodPopup'];
+    });
   },
 };
 </script>
