@@ -96,6 +96,12 @@ export default {
         case 'diary':
           this.openDiary();
           break;
+        case 'lower_header':
+          this.sendSimpleMessageToContentScript({ cmd: 'lower_header', value: '' });
+          break;
+        case 'up_header':
+          this.sendSimpleMessageToContentScript({ cmd: 'up_header', value: '' });
+          break;
         default:
           break;
       }

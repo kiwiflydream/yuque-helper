@@ -159,6 +159,16 @@ let popupItems = [
     icon: 'el-icon-collection',
   },
   {
+    title: '标题降级',
+    handlerType: 'lower_header',
+    icon: 'el-icon-bottom',
+  },
+  {
+    title: '标题升级',
+    handlerType: 'up_header',
+    icon: 'el-icon-top',
+  },
+  {
     title: '配置',
     handlerType: 'setting',
     icon: 'el-icon-setting',

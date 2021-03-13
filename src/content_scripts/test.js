@@ -160,6 +160,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
+ * 级别修改
+ */
+function headerLevelUpdate(isDown) {
+  var step = 1;
+  var maxLevel = 6;
+  if (isDown) {
+    step = -1;
+    maxLevel = 1;
+  }
+  $('.lake-content-editor-core :header').each(function() {
+    let tagName = $(this)[0].tagName;
+    let tagNumber = parseInt(tagName[1]);
+    var newTag = 'h' + tagNumber;
+    if ((isDown && tagNumber > maxLevel) || (!isDown && tagNumber < maxLevel)) {
+      newTag = 'h' + (tagNumber + step);
+    }
+    console.log(`<${newTag}>${this.innerHTML}</${newTag}>`);
+    $(this).replaceWith(`<${newTag}>${this.innerHTML}</${newTag}>`);
+  });
+}
+
+/**
  * 获得单词总数
  */
 function getWordCount(totalWordCount, rootSel) {
@@ -314,6 +336,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             .join('') + ' ';
         $(this).text(header + title);
       });
+      break;
+    // 标题降级
+    case 'lower_header':
+      headerLevelUpdate(false);
+      break;
+    // 标题升级
+    case 'up_header':
+      headerLevelUpdate(true);
       break;
     default:
       break;
