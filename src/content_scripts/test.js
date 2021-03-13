@@ -265,12 +265,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         let aTag = $(this);
         let href = aTag.attr('href');
         let title = aTag.attr('title');
+        if (!href.startsWith('http')) {
+          href = `https://${window.location.host}${href}`;
+        }
         if (title) {
-          urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+          urls += `[${title}](${href})` + '<br/>';
         } else {
           title = aTag.text();
           if (title) {
-            urls += `[${title}](https://${window.location.host}${href})` + '<br/>';
+            urls += `[${title}](${href})` + '<br/>';
           }
         }
       });
