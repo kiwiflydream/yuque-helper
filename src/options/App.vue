@@ -95,19 +95,6 @@
 
       <el-row type="flex" justify="center">
         <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
-          <el-form-item label="关闭提示小红点" prop="closeRedDot">
-            <el-switch v-model="yuqueOption.closeRedDot" active-text="开启" inactive-text="关闭"> </el-switch>
-          </el-form-item>
-        </el-col>
-        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
-          <el-form-item label="全角字符格式化" prop="fullWidthCharsAndFollowingSpaces">
-            <el-switch v-model="yuqueOption.fullWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-      <el-row type="flex" justify="center">
-        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
           <el-form-item label="半角字符格式化" prop="halfWidthCharsAndFollowingSpaces">
             <el-switch v-model="yuqueOption.halfWidthCharsAndFollowingSpaces" active-text="开启" inactive-text="关闭"> </el-switch>
           </el-form-item>
