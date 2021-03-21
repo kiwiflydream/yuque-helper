@@ -120,6 +120,12 @@ let popupItems = [
     icon: 'el-icon-cherry',
   },
   {
+    title: '图片搜索',
+    handlerType: 'queryImg',
+    isShow: true,
+    icon: 'el-icon-picture-outline',
+  },
+  {
     title: '插入 Bing 图片',
     handlerType: 'prepend_img',
     isShow: true,

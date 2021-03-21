@@ -1,36 +1,58 @@
 <template>
-  <div class="content">
-    <popup-item
-      :title="item.title"
-      :isShow="item.isShow"
-      :handlerType="item.handlerType"
-      :icon="item.icon"
-      @handler="cardHandler"
-      v-for="item in popupItems"
-      :key="item.handlerType"
-    ></popup-item>
+  <div>
+    <div class="content" v-if="!isSearchImg">
+      <popup-item
+        :title="item.title"
+        :isShow="item.isShow"
+        :handlerType="item.handlerType"
+        :icon="item.icon"
+        @handler="cardHandler"
+        v-for="item in popupItems"
+        :key="item.handlerType"
+      ></popup-item>
 
-    <block-popover-popup-item
-      :isShow="colorPopup"
-      @handler="appendColorBlock"
-      :items="colorBlockItems"
-      title="插入提示框"
-      icon="el-icon-potato-strips"
-      itemWidth="80"
-      itemHeight="45"
-    ></block-popover-popup-item>
+      <block-popover-popup-item
+        :isShow="colorPopup"
+        @handler="appendColorBlock"
+        :items="colorBlockItems"
+        title="插入提示框"
+        icon="el-icon-potato-strips"
+        itemWidth="80"
+        itemHeight="45"
+      ></block-popover-popup-item>
 
-    <block-popover-popup-item
-      :isShow="colorHeaderPopup"
-      @handler="appendColorHeader"
-      :items="colorHeaderItems"
-      title="插入彩色标题头"
-      icon="el-icon-ice-cream-round"
-      itemWidth="80"
-      itemHeight="45"
-    ></block-popover-popup-item>
+      <block-popover-popup-item
+        :isShow="colorHeaderPopup"
+        @handler="appendColorHeader"
+        :items="colorHeaderItems"
+        title="插入彩色标题头"
+        icon="el-icon-ice-cream-round"
+        itemWidth="80"
+        itemHeight="45"
+      ></block-popover-popup-item>
 
-    <block-popover-popup-item :isShow="moodPopup" @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
+      <block-popover-popup-item :isShow="moodPopup" @handler="appendImg" :items="imgItems" title="插入表情" icon="el-icon-grape"></block-popover-popup-item>
+    </div>
+    <div id="imgContent" v-else>
+      <el-row>
+        <el-col :span="24">
+          <el-input placeholder="请输入图片关键字" v-model="queryImg" @change="queryImgs">
+            <el-button slot="append" icon="el-icon-search" @click="queryImgs"></el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+
+      <img src="/icons/empty.png" v-if="this.imgs.length == 0" />
+      <el-row v-eles>
+        <el-col :span="24" v-for="(row, index) in imgs" :key="index">
+          <el-row :gutter="10" style="margin-top: 10px">
+            <el-col :span="8" v-for="(col, index) in row" :key="index">
+              <el-image :src="col" @click="() => appendImgCursor(col.replace(/\?.*/, ''))"></el-image>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -40,6 +62,8 @@ import PopupItem from '../componts/PopupItem.vue';
 import { mood, colorBlockItems, colorHeaderItems, popupItems, defaultYuqeuOption } from '../common/config.js';
 import { createDoc, readDoc, findDocs } from '../common/yuque-sdk';
 import { randomNum } from '../common/utils';
+import { createClient } from 'pexels';
+import chunk from 'lodash/chunk';
 
 var dayjs = require('dayjs');
 
@@ -47,6 +71,8 @@ export default {
   components: { PopupItem, BlockPopoverPopupItem },
   data() {
     return {
+      isSearchImg: false,
+      queryImg: '',
       colorPopup: true,
       colorHeaderPopup: true,
       moodPopup: true,
@@ -54,9 +80,23 @@ export default {
       imgItems: mood,
       colorBlockItems: colorBlockItems,
       colorHeaderItems: colorHeaderItems,
+      imgs: [],
     };
   },
   methods: {
+    // 图片查询
+    queryImgs() {
+      const client = createClient('563492ad6f91700001000001eca94caacb6e46de863cb2e3d89bdf4b');
+      const query = this.queryImg;
+      client.photos.search({ query, per_page: 21 }).then(photos => {
+        if (photos) {
+          this.imgs = chunk(
+            photos.photos.map(photo => photo.src.portrait),
+            3
+          );
+        }
+      });
+    },
     // 卡片处理
     cardHandler(handlerType) {
       switch (handlerType) {
@@ -111,6 +151,9 @@ export default {
         case 'up_header':
           this.sendSimpleMessageToContentScript({ cmd: 'up_header', value: '' });
           break;
+        case 'queryImg':
+          this.isSearchImg = true;
+          break;
         default:
           break;
       }
@@ -120,6 +163,14 @@ export default {
       this.getCurrentTab(tab => {
         window.open(this.urlFormat(tab.url) + '/markdown?plain=true&linebreak=false&anchor=false', '_blank');
       });
+    },
+    // 添加图片
+    appendImgCursor(imgUrl) {
+      this.appendContendCursor(`<img src="${imgUrl}"/>`);
+    },
+    // 光标处添加内容
+    appendContendCursor(content) {
+      this.sendMessageToContentScript({ cmd: 'append_content_in_cursor', value: content }, function(response) {});
     },
     // 以 html 打开
     openHtml() {
@@ -351,5 +402,9 @@ export default {
   width: 200px;
   background-color: #f3f4f7;
   border-radius: 5px;
+}
+#imgContent {
+  width: 480px;
+  height: 380px;
 }
 </style>

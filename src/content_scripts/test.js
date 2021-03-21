@@ -239,6 +239,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     case 'append_color_block':
       insertContent(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
       break;
+    // 在光标处插入数据
+    case 'append_content_in_cursor':
+      insertContent(`${request.value}`);
+      break;
     case 'append_color_header':
       insertContent(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;

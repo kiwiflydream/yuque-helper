@@ -29,6 +29,8 @@
     "dayjs": "^1.10.3",
     "element-ui": "^2.14.1",
     "jquery": "^3.5.1",
+    "lodash": "^4.17.21",
+    "pexels": "^1.0.1",
     "turndown": "^7.0.0",
     "turndown-plugin-gfm": "^1.0.2",
     "vue": "^2.6.10",
