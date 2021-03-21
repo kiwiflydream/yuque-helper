@@ -242,6 +242,7 @@ let defaultYuqeuOption = {
   colorPopup: true,
   colorHeaderPopup: true,
   moodPopup: true,
+  queryImg: true,
 };
 
 export { mood, colorBlockItems, colorHeaderItems, popupItems, defaultYuqeuOption };

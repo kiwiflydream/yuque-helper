@@ -234,6 +234,11 @@
             <el-switch v-model="yuqueOption.moodPopup" active-text="开启" inactive-text="关闭"> </el-switch>
           </el-form-item>
         </el-col>
+        <el-col :xs="12" :sm="8" :md="7" :lg="6" :xl="4">
+          <el-form-item label="图片搜索" prop="queryImg">
+            <el-switch v-model="yuqueOption.queryImg" active-text="开启" inactive-text="关闭"> </el-switch>
+          </el-form-item>
+        </el-col>
       </el-row>
 
       <el-row type="flex" justify="center">
