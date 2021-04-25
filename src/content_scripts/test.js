@@ -66,7 +66,7 @@ function formatText() {
       */
       useSimpleQuotation: option.useSimpleQuotation,
     };
-    $('div.ne-editor-box p:not(:has(span))').each(function() {
+    $('ne-p ne-text').each(function() {
       let content = $(this).html();
       if (!/^\s*$/.test(content)) {
         $(this).html(bishengFormat(content, config));
@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
               .children('span')
               .first()
               .text();
-            console.log(tipText + ' - ' + spanCount);
             if (!(tipText && tipText.indexOf('(') != -1) && spanCount <= 1) {
               $('.lark-editor-save-tip').append(`<span>&nbsp;(${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})</span>`);
             } else {
@@ -246,7 +245,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break;
     // 添加图片
     case 'append_img':
-      $('div.ne-editor-box').append(`<img src="${request.value}">`);
+      $('div.ne-editor-box').append(`<img class="ne-image" src="${request.value}">`);
       break;
     case 'append_color_block':
       insertContent(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
@@ -259,14 +258,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       insertContent(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;
     case 'prepend_img':
-      $('div.ne-editor-box').prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
+      $('div.ne-editor-box').prepend(`<img class="ne-image" src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
       break;
     // 缩进
     case 'prepend_blank':
-      $('div.ne-editor-box p:not(:has(span))').each(function() {
+      $('ne-p ne-text').each(function() {
         let content = $(this).text();
         if (!/^\s*$/.test(content)) {
-          $(this).text('  ' + content.trim());
+          $(this).html('&nbsp;&nbsp;' + content.trim());
         }
       });
       break;
