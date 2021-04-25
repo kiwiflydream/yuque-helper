@@ -66,7 +66,7 @@ function formatText() {
       */
       useSimpleQuotation: option.useSimpleQuotation,
     };
-    $('.lake-content-editor-core p:not(:has(span))').each(function() {
+    $('div.ne-editor-box p:not(:has(span))').each(function() {
       let content = $(this).html();
       if (!/^\s*$/.test(content)) {
         $(this).html(bishengFormat(content, config));
@@ -123,15 +123,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (getSaleConfig(option, 'wordCount')) {
           setInterval(() => {
             let spanCount = $('.lark-editor-save-tip').children('span').length;
-            let totlaCount = removeAllBlank($('.lake-content-editor-core').text()).length;
-            let totalWordCount = getWordCount(totlaCount, '.lake-content-editor-core');
-            if (spanCount <= 1) {
+            let totlaCount = removeAllBlank($('div.ne-editor-box').text()).length;
+            let totalWordCount = getWordCount(totlaCount, 'div.ne-editor-box');
+            let tipText = $('.lark-editor-save-tip')
+              .children('span')
+              .first()
+              .text();
+            console.log(tipText + ' - ' + spanCount);
+            if (!(tipText && tipText.indexOf('(') != -1) && spanCount <= 1) {
               $('.lark-editor-save-tip').append(`<span>&nbsp;(${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})</span>`);
             } else {
-              $('.lark-editor-save-tip')
-                .children('span')
-                .last()
-                .text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
+              if (tipText && tipText.indexOf('(') != -1) {
+                $('.lark-editor-save-tip')
+                  .children('span')
+                  .first()
+                  .text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
+              } else {
+                $('.lark-editor-save-tip')
+                  .children('span')
+                  .last()
+                  .text(` (${option.countPrefix} ${(totalWordCount * option.countCoefficient).toFixed(1) / 1} ${option.countSuffix})`);
+              }
             }
           }, 500);
         }
@@ -169,7 +181,7 @@ function headerLevelUpdate(isDown) {
     step = -1;
     maxLevel = 1;
   }
-  $('.lake-content-editor-core :header').each(function() {
+  $('div.ne-editor-box :header').each(function() {
     let tagName = $(this)[0].tagName;
     let tagNumber = parseInt(tagName[1]);
     var newTag = 'h' + tagNumber;
@@ -221,7 +233,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request.cmd) {
     case 'toc':
       let headMk = '';
-      $('.lake-content-editor-core :header').each(function() {
+      $('div.ne-editor-box :header').each(function() {
         let tagName = $(this)[0].tagName;
         let title = $(this).text();
         let id = $(this).attr('id');
@@ -230,11 +242,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           headMk += `<a href="${window.location.href.slice(0, -5)}#${id}">${head}${title}</a>` + '<br/>';
         }
       });
-      $('.lake-content-editor-core').prepend(headMk + '<br/>');
+      $('div.ne-editor-box').prepend(headMk + '<br/>');
       break;
     // 添加图片
     case 'append_img':
-      $('.lake-content-editor-core').append(`<img src="${request.value}">`);
+      $('div.ne-editor-box').append(`<img src="${request.value}">`);
       break;
     case 'append_color_block':
       insertContent(`<blockquote class="lake-alert lake-alert-${request.value}"><p><br/></p></blockquote>`);
@@ -247,11 +259,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       insertContent(`<p><span style="background-color: ${request.value};"> </span> </p>`);
       break;
     case 'prepend_img':
-      $('.lake-content-editor-core').prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
+      $('div.ne-editor-box').prepend(`<img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture&a=${Math.random()}">`);
       break;
     // 缩进
     case 'prepend_blank':
-      $('.lake-content-editor-core p:not(:has(span))').each(function() {
+      $('div.ne-editor-box p:not(:has(span))').each(function() {
         let content = $(this).text();
         if (!/^\s*$/.test(content)) {
           $(this).text('  ' + content.trim());
@@ -319,7 +331,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break;
     case 'generator_header':
       let headerArr = new Array(0, 0, 0, 0, 0, 0);
-      $('.lake-content-editor-core :header').each(function() {
+      $('div.ne-editor-box :header').each(function() {
         let tagName = $(this)[0].tagName;
         let tagNumber = tagName[1];
         let title = $(this).text();
